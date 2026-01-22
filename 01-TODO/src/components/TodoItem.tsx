@@ -1,8 +1,10 @@
-type Todo = {
-  id: number;
-  text: string;
-  completed: boolean;
-};
+import type { Todo } from "../types/todo";  // type is used oterwise it gives error
+
+// type Todo = {
+//   id: number;
+//   text: string;
+//   completed: boolean;
+// };
 
 type Props = {
   todo: Todo;

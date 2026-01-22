@@ -1,11 +1,12 @@
 import { useState } from "react";
 import TodoItem from "./components/TodoItem";
+import type { Todo } from "./types/todo"; //type is used otherwise it gives error
 
-type Todo = {
-  id: number;
-  text: string;
-  completed: boolean;
-};
+// type Todo = {
+//   id: number;
+//   text: string;
+//   completed: boolean;
+// };
 
 const App = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
