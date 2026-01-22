@@ -1,77 +1,62 @@
-
-import { createContext, useContext, useState } from "react"
-
-export interface ITodo {
-    children: React.ReactNode //means any valid react node 
-}
+import { createContext, useContext, useState } from "react";
 
 export interface MyTodo {
-    id: string;
-    title: string;
-    completed: boolean;
-    createdAt: Date;
+  id: string;
+  title: string;
+  completed: boolean;
+  createdAt: Date;
 }
 
-export interface ITodosContext {
-    todos: MyTodo[];
-    handelAddTodo: (title: string) => void;
-    toogleTodoAsCompleted: (id: string) => void;
-    handelDeleteTodo: (id: string) => void;
+interface ITodosContext {
+  todos: MyTodo[];
+  handelAddTodo: (title: string) => void;
+  toogleTodoAsCompleted: (id: string) => void;
+  handelDeleteTodo: (id: string) => void;
 }
 
+const TodosContext = createContext<ITodosContext | null>(null);
 
-export const TodosContext = createContext<ITodosContext | null>(null)
+export const TodosProvider = ({ children }: { children: React.ReactNode }) => {
+  const [todos, setTodos] = useState<MyTodo[]>([]);
 
-export const TodosProvider = ({ children }: ITodo) => {
-    const [todos, setTodos] = useState<MyTodo[]>([])
+  const handelAddTodo = (title: string) => {
+    if (!title.trim()) return;
 
-    const handelAddTodo = (title: string) => {
-        setTodos(prevTodos => {
-            const newTodos: MyTodo = {
-                id: Math.random().toString(),
-                title: title,
-                completed: false,
-                createdAt: new Date(),
-            }
-            return [newTodos, ...prevTodos]
-        }
-        )
-    }
+    const newTodo: MyTodo = {
+      id: crypto.randomUUID(),
+      title,
+      completed: false,
+      createdAt: new Date(),
+    };
 
-    //Mark as completed function can be added here
-    const toogleTodoAsCompleted = (id: string) => {
-        setTodos((prevTodos) => {
-            let newTodos = prevTodos.map((todo) => {
-                if (todo.id === id) {
-                    return { ...todo, completed: !todo.completed }
-                }
-                return todo;
-            }
-            )
-            return newTodos;
-        })
-    }
+    setTodos((prev) => [newTodo, ...prev]);
+  };
 
-    //Delete function can be added here
-    const handelDeleteTodo = (id: string) => {
-        setTodos((prevTodos) => {
-            let newTodos = prevTodos.filter((todo) => todo.id !== id)
-            return newTodos;
-        })
-    }
+  const toogleTodoAsCompleted = (id: string) => {
+    setTodos((prev) =>
+      prev.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
+  };
 
-    return <TodosContext.Provider value={{ todos, handelAddTodo, toogleTodoAsCompleted, handelDeleteTodo }} >
-        {children}
+  const handelDeleteTodo = (id: string) => {
+    setTodos((prev) => prev.filter((todo) => todo.id !== id));
+  };
+
+  return (
+    <TodosContext.Provider
+      value={{ todos, handelAddTodo, toogleTodoAsCompleted, handelDeleteTodo }}
+    >
+      {children}
     </TodosContext.Provider>
-}
+  );
+};
 
 export const useTodos = () => {
-    const todoConsumer = useContext(TodosContext)
-    if (!todoConsumer) {
-        throw new Error("useTodos must be used within TodosProvider")
-    }
-
-    return todoConsumer;
-}
-
-
+  const context = useContext(TodosContext);
+  if (!context) {
+    throw new Error("useTodos must be used inside TodosProvider");
+  }
+  return context;
+};
