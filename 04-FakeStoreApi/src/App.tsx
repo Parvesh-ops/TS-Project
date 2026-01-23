@@ -16,7 +16,10 @@ const App = () => {
         const response = await axios.get<IProduct[]>('https://fakestoreapi.com/products')
         setProducts(response.data)
       } catch (error) {
-        setError("Something went wrong!");
+        if (axios.isAxiosError(error)) {
+          console.error(error.response?.status);
+        }
+        setError("Failed to load products");
       } finally {
         setLoading(false);
       }
