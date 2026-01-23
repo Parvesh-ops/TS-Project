@@ -23,14 +23,14 @@ export const AddTodo = () => {
           type="text"
           value={todo}
           onChange={(e) => setTodo(e.target.value)}
-          placeholder="What needs to be done?"
-          className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-800 placeholder-gray-400"
+          placeholder="Enter your task..."
+          className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200 text-gray-800 placeholder-gray-400"
         />
 
         <button
           type="submit"
           disabled={!todo.trim()}
-          className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 active:scale-95 transition-all duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed disabled:hover:bg-gray-300 shadow-sm hover:shadow-md"
+          className="px-6 py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 active:scale-95 transition-all duration-200 disabled:bg-red-300 disabled:cursor-not-allowed disabled:hover:bg-red-300 shadow-sm hover:shadow-md"
         >
           Add
         </button>
